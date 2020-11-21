@@ -1,0 +1,17 @@
+C:\JDL OSD\bin\Release\OSD_JDL_Config.exe.config
+C:\JDL OSD\bin\Release\vlcsnap-2012-01-28-07h46m04s95.png
+C:\JDL OSD\bin\Release\OSD_Charset.mcm
+C:\JDL OSD\bin\Release\OSD_JDL_Config.exe.manifest
+C:\JDL OSD\bin\Release\OSD_JDL_Config.application
+C:\JDL OSD\bin\Release\OSD_JDL_Config.exe
+C:\JDL OSD\bin\Release\OSD_JDL_Config.pdb
+C:\JDL OSD\obj\x86\Release\OSD JDL.csprojResolveAssemblyReference.cache
+C:\JDL OSD\obj\x86\Release\OSD.AboutBox1.resources
+C:\JDL OSD\obj\x86\Release\OSD.OSD.resources
+C:\JDL OSD\obj\x86\Release\OSD.Properties.Resources.resources
+C:\JDL OSD\obj\x86\Release\OSD JDL.csproj.GenerateResource.Cache
+C:\JDL OSD\obj\x86\Release\OSD_JDL_Config.TrustInfo.xml
+C:\JDL OSD\obj\x86\Release\OSD_JDL_Config.exe.manifest
+C:\JDL OSD\obj\x86\Release\OSD_JDL_Config.application
+C:\JDL OSD\obj\x86\Release\OSD_JDL_Config.exe
+C:\JDL OSD\obj\x86\Release\OSD_JDL_Config.pdb
