@@ -1,0 +1,65 @@
+Panel 1
+Pitch	24	9	True
+Roll	24	10	True
+Battery Voltage	1	6	True
+Visible Sats	11	13	True
+GPS Lock	14	13	True
+GPS Coord	1	13	True
+Heading Rose	16	13	True
+Home Direction & Distance	11	1	True
+Home Line-Of-Sight Distance	16	12	True
+Waypoint Distance & ETA	1	4	False
+Safety Radius & Eff/Glide Est.	1	8	True
+GPS Altitude (ASL) & GPS AAH	1	12	True
+Baro Altitude-Above-Home (AAH)	12	2	True
+Climb Rate	23	5	True
+Energy Used & Battery Percent	22	1	True
+Current	22	3	True
+Ground Speed	24	11	True
+3D Speed / Air Speed	12	3	True
+Throttle	24	8	True
+Flight Mode	11	14	True
+Horizon	8	6	True
+Warnings	9	5	True
+Flight Times	1	1	True
+RSSI & LinkQuality	9	11	True
+Trip Odometer	1	11	True
+Temperature	1	3	True
+Panel 2
+Pitch	24	13	False
+Roll	24	14	False
+Battery Voltage	1	8	False
+Visible Sats	1	11	False
+GPS Lock	4	11	False
+GPS Coord	1	1	True
+Heading Rose	22	2	False
+Home Direction & Distance	11	1	True
+Home Line-Of-Sight Distance	12	1	False
+Waypoint Distance & ETA	1	6	True
+Safety Radius & Eff/Glide Est.	1	3	True
+GPS Altitude (ASL) & GPS AAH	4	12	False
+Baro Altitude-Above-Home (AAH)	12	2	True
+Climb Rate	23	5	True
+Energy Used & Battery Percent	22	1	True
+Current	22	3	True
+Ground Speed	1	6	False
+3D Speed / Air Speed	12	3	True
+Throttle	19	13	False
+Flight Mode	25	14	True
+Horizon	10	4	False
+Warnings	0	0	False
+Flight Times	12	13	False
+RSSI & LinkQuality	1	14	True
+Trip Odometer	1	12	False
+Temperature	1	11	False
+Configuration
+Units	0
+Stall	40
+Battery Cell Warning Level	50
+Battery Type	1
+Battery Capacity	5200
+Volt Div Ratio	0
+Current Amps Per Volt	0
+Current Amps Offset	0
+Video Mode	1
+Firmware Type	2
