@@ -34,14 +34,16 @@
 
 #if defined MICRO_OSD_KVTEAM
 
-#define VOLTAGE_PIN       0                       // Micro OSD KV team : Bat1
-//#define VOLTAGE_PIN       2                       // Micro OSD KV team : Bat2
-#define CURRENT_PIN       1
+#define VOLTAGE_PIN       A2                       // Micro OSD KV team : Bat1    // JDL: Reversed Batt1 & Batt2, it was wrong 
+//#define VOLTAGE_PIN       A0                       // Micro OSD KV team : Bat2
+#define CURRENT_PIN       A1
 
 #else
 
-#define VOLTAGE_PIN       6                      // MinOPOSD JDL
+#define VOLTAGE_PIN       6                      // MinOPOSD JDL - ZMR250 CC3D ?!
 #define CURRENT_PIN       1                      // MinOPOSD JDL
+//#define VOLTAGE_PIN       A2                      // MinOPOSD JDL - Fixed, Batt1 (right-most pad)
+//#define CURRENT_PIN       A1                      // MinOPOSD JDL - Curr (left-most pad)
 
 #endif
 

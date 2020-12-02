@@ -23,6 +23,7 @@ static const PROGMEM uint8_t batt_curve_lihv[100] = {
 #endif
 #endif
 
+static const float batt_levels[5] = {5.0f, 8.8f, 13.2f, 17.45f, 21.8f};                                
 
 static unsigned long loop10hz_prevmillis; // 10hz loop
 
@@ -81,7 +82,7 @@ static float osd_climb           = 0;          // climb rate
 static float osd_groundspeed     = 0;          // ground speed
 static float osd_3D_speed       = 0;           // vector speed
 #ifdef FIXED_WING
-static float osd_airspeed       = 0;           // airspeed
+static float osd_airspeed       = 0;           // vector speed
 #endif
 static float osd_travel_distance = 0;          // travel distance
 static float osd_heading         = 0;          // ground course heading

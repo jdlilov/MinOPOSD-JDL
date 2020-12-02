@@ -534,21 +534,34 @@ void panWarn(int first_col, int first_line)
                     }
                     
                   #ifdef RSSI_ON_INPUT_CHANNEL
-                    if (rssi < rssi_warn_level) {
-                        warning_type   = cycle;
-                        warning_string = "  rssi low  ";
+                    if (ISd(0, RSSI_BIT) || ISd(1, RSSI_BIT)) 
+                    {
+                        if (rssi < rssi_warn_level) {
+                            warning_type   = cycle;
+                            warning_string = "  rssi low  ";
+                        }
                     }
                   #endif  
                     break;
   #else
                 case 6: // RSSI LOW
-//                    if (ISd(0, RSSI_BIT) || ISd(1, RSSI_BIT)) 
+                  #ifdef RSSI_ON_INPUT_CHANNEL
+                    if (ISd(0, RSSI_BIT) || ISd(1, RSSI_BIT)) 
+                    {
+                        if (rssi < rssi_warn_level) {
+                            warning_type   = cycle;
+                            warning_string = "  rssi low  ";
+                        }
+                    }
+                  #else  
+                    if (ISd(0, RSSI_BIT) || ISd(1, RSSI_BIT)) 
                       {
                       if ((oplm_rssi < oplm_rssi_warn_level || oplm_linkquality < oplm_linkq_warn_level) && oplm_rssi != 0) {
                         warning_type   = cycle;
                         warning_string = "link quality";
                       }
                     }
+                  #endif  
                     break;
 
                 case 7: // Mag status, only while disarmed and used (preflight check)

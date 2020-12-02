@@ -1,4 +1,5 @@
-// JDL v2.51 (16.11.2020) 
+// JDL v2.53 (26.11.2020)
+// CC3D & Revo Compatible
 /*
 
    Copyright (c) 2011.  All rights reserved.
@@ -18,6 +19,7 @@
    and all other members of DIY Drones Dev team
    Thanks to: Chris Anderson, Jordi Munoz
    Mods and new functions added by: Julian Lilov
+
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -180,7 +182,9 @@ void setup()
 #ifdef FLIGHT_BATT_ON_REVO
 //    delay(1000); // To give small extra waittime to users
     Serial.flush();
+  #ifdef LOGO_AT_BOOT
     delay(BOOTTIME+1000); // To give small extra waittime to users
+  #endif  
 #else
     loadBar();
 #endif    
@@ -310,3 +314,43 @@ void unplugSlaves()
 #endif
     digitalWrite(MAX7456_SELECT, HIGH); // unplug OSD
 }
+
+/*
+uint8_t _pinMask = 0;         // Pin bitmask.
+volatile uint8_t *_pinOutput; // Output port register
+
+void NewTone(uint8_t pin, unsigned long frequency, unsigned long length) {
+  uint8_t prescaler = _BV(CS10);                 // Try using prescaler 1 first.
+  unsigned long top = F_CPU / frequency / 4 - 1; // Calculate the top.
+  if (top > 65535) {                             // If not in the range for prescaler 1, use prescaler 256 (61 Hz and lower @ 16 MHz).
+    prescaler = _BV(CS12);                       // Set the 256 prescaler bit.
+    top = top / 256 - 1;                         // Calculate the top using prescaler 256.
+  }
+
+  if (_pinMask == 0) {
+    _pinMask = digitalPinToBitMask(pin);                    // Get the port register bitmask for the pin.
+    _pinOutput = portOutputRegister(digitalPinToPort(pin)); // Get the output port register for the pin.
+    uint8_t *_pinMode = (uint8_t *) portModeRegister(digitalPinToPort(pin)); // Get the port mode register for the pin.
+    *_pinMode |= _pinMask; // Set the pin to Output mode.
+  }
+
+  ICR1    = top;                     // Set the top.
+  if (TCNT1 > top) TCNT1 = top;      // Counter over the top, put within range.
+  TCCR1B  = _BV(WGM13)  | prescaler; // Set PWM, phase and frequency corrected (ICR1) and prescaler.
+  TCCR1A  = _BV(COM1B0);
+  TIMSK1 |= _BV(OCIE1A);             // Activate the timer interrupt.
+}
+
+void noNewTone(uint8_t pin) {
+  TIMSK1 &= ~_BV(OCIE1A);   // Remove the timer interrupt.
+  TCCR1B  = _BV(CS11);      // Default clock prescaler of 8.
+  TCCR1A  = _BV(WGM10);     // Set to defaults so PWM can work like normal (PWM, phase corrected, 8bit).
+  *_pinOutput &= ~_pinMask; // Set pin to LOW.
+  _pinMask = 0; // Flag so we know note is no longer playing.
+}
+
+ISR(TIMER1_COMPA_vect) { // Timer interrupt vector.
+  *_pinOutput ^= _pinMask; // Toggle the pin state.
+}
+*/
+

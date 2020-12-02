@@ -68,20 +68,28 @@ void flight_batt_read(void)
  
 
         if (batt_type) {
-          if (voltage > 21.8)                            // min 3.63V for 6-cell (21.0-25.2)    (21.0-26.1)
+
+          for (int cell_count=6; cell_count>1; --cell_count) {
+              if ((voltage > batt_levels[cell_count-2]) && (num_cells <= cell_count)) {
+                  num_cells = cell_count;
+                  break;
+              }
+          }
+/*  
+          if (voltage > 21.8)                            // min 3.63V for 6-cell (21.0-25.2)    (21.0-26.1)      // 28994    22.2
             num_cells=6;
           else  
-            if ((voltage > 17.45) && (num_cells < 5))    // min 3.49V for 5-cell (17.5-21.0)    (17.5-21.75)
+            if ((voltage > 17.45) && (num_cells < 5))    // min 3.49V for 5-cell (17.5-21.0)    (17.5-21.75)                 17.8
               num_cells=5;
             else  
-              if ((voltage > 13.2) && (num_cells < 4))   // min 3.30V for 4-cell (14.0-16.8)    (14.0-17.4)
+              if ((voltage > 13.2) && (num_cells < 4))   // min 3.30V for 4-cell (14.0-16.8)    (14.0-17.4)                  13.4
                 num_cells=4;
               else 
-                if ((voltage > 8.8) && (num_cells < 3))  // min 2.93V for 3-cell (10.5-12.6)    (10.5-13.05)
+                if ((voltage > 8.8) && (num_cells < 3))  // min 2.93V for 3-cell (10.5-12.6)    (10.5-13.05)                 9.0 
                   num_cells=3;
                 else  
-                  if ((voltage > 5.0) && (num_cells < 2))// min 2.50V for 2-cell (7.0-8.4)      (7.0-8.7)
-                    num_cells=2;                             
+                  if ((voltage > 5.0) && (num_cells < 2))// min 2.50V for 2-cell (7.0-8.4)      (7.0-8.7)                    4.60
+                    num_cells=2;                             */
         }
         else 
           num_cells = 4;
@@ -127,36 +135,61 @@ void flight_batt_read(void)
         // float sampled_batt_percent = (((voltage / num_cells) - 3.0) / 1.08) * 100.0;
 
         float sampled_batt_percent;
+        float battP_raw;
+        uint8_t battP_int;
 
         osd_vbat_A = voltage;
 
         if (batt_type) {
+            battP_raw = ((osd_vbat_A / num_cells) - 3.4635) * bpm;
+            if (battP_raw < 0.0)
+            {
+              battP_raw = 0.0;
+            }
+            if (battP_raw > 99.0)
+            {
+              battP_raw = 99.0;
+            }
+            battP_int = (uint8_t)battP_raw;
+          
         #ifdef BAT_VOLTAGE_CURVE
 
           #ifndef LIHV_DETECTION
-
-          sampled_batt_percent = pgm_read_byte(&batt_curve[(uint8_t)(((osd_vbat_A / num_cells) - 3.4635) * bpm)]);        // LiPo
+ 
+            sampled_batt_percent = pgm_read_byte(&batt_curve[battP_int]);        // LiPo
 
           #else
 
-          if (LiHV_mode) {
-              sampled_batt_percent = pgm_read_byte(&batt_curve_lihv[(uint8_t)(((osd_vbat_A / num_cells) - 3.4635) * bpm)]);        // LiHV
-          }
-          else {
-              sampled_batt_percent = pgm_read_byte(&batt_curve[(uint8_t)(((osd_vbat_A / num_cells) - 3.4635) * bpm)]);        // LiPo
-          }
+            if (LiHV_mode) {
+                sampled_batt_percent = pgm_read_byte(&batt_curve_lihv[battP_int]);        // LiHV
+            }
+            else {
+                sampled_batt_percent = pgm_read_byte(&batt_curve[battP_int]);        // LiPo
+            }
                   
           #endif
                   
         #else                
-          sampled_batt_percent = ((osd_vbat_A / num_cells) - 3.4635) * bpm;          // LiPo
+            sampled_batt_percent = battP_int;          // LiPo
         #endif                
         }
         else {
 //                #ifdef BAT_VOLTAGE_CURVE
 //                  sampled_batt_percent = batt_curve[(uint8_t)(((osd_vbat_A / num_cells) - 3.0) * 92.5925926)];        // LiIon
 //                #else                
-          sampled_batt_percent = ((osd_vbat_A / num_cells) - 3.0) * 92.5925926;          // LiIon
+
+            battP_raw = ((osd_vbat_A / num_cells) - 3.0) * 92.5925926;
+            if (battP_raw < 0.0)
+            {
+              battP_raw = 0.0;
+            }
+            if (battP_raw > 99.0)
+            {
+              battP_raw = 99.0;
+            }
+//            battP_int = (uint8_t)battP_raw;
+
+            sampled_batt_percent = (uint8_t)battP_raw;          // LiIon
 //                #endif                
         }
 
@@ -172,10 +205,10 @@ void flight_batt_read(void)
             }
         }
         
-        if (osd_battery_remaining_percent_V > 99.0)
-        {
-          osd_battery_remaining_percent_V = 99.0;
-        }
+//        if (osd_battery_remaining_percent_V > 99.0)
+//        {
+//            osd_battery_remaining_percent_V = 99.0;
+//        }
 
         if (curr_amp_per_volt > 0) { // Consider Amp sensor disbled when Amp per Volt ratio is zero
 
