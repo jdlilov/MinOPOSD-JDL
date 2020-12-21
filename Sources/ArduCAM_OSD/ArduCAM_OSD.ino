@@ -1,4 +1,4 @@
-// JDL v2.53 (26.11.2020)
+// JDL v2.56 (06.12.2020) (for LP 16.09_next_r735) - Requires Charset_1_3_0 - jdl v.16c.mcm
 // CC3D & Revo Compatible
 /*
 
@@ -114,7 +114,7 @@ void setup()
 #ifdef ArduCAM328
     pinMode(10, OUTPUT); // USB ArduCam Only
 #endif
-    pinMode(MAX7456_SELECT, OUTPUT); // OSD CS
+//    pinMode(MAX7456_SELECT, OUTPUT); // OSD CS    // JDL: Removed because is set again in osd::init
 
     Serial.begin(TELEMETRY_SPEED);
 
@@ -123,12 +123,12 @@ void setup()
 #endif
 
     // Prepare OSD for displaying
-    unplugSlaves();
+//    unplugSlaves();                                 // JDL: Removed because is called again in osd::init
     osd.init();
 
     // Start
-    startPanels();
     delay(1000);
+    startPanels();
 
     // OSD debug for development (Shown at start)
 #ifdef membug
@@ -198,6 +198,9 @@ void setup()
     osd.clear();
 
     loop10hz_prevmillis = millis();
+#ifdef MAX_SOFTRESET
+    loop_1_hz_prevmillis = loop10hz_prevmillis; //millis();      // JDL: good, 4 bytes saved :)
+#endif    
 
 } // END of setup();
 
@@ -218,9 +221,16 @@ void loop()
 //  }
 
   if (uavtalk_read() || ((loop10hz_prevmillis + 100) < millis() )) {
-    loop10hz_prevmillis = millis();
-    update_all();
+      loop10hz_prevmillis = millis();
+      update_all();
   }
+
+#ifdef MAX_SOFTRESET
+  if ((loop_1_hz_prevmillis + 1000) < millis() ) {        // Once a second check if MAX is stalled and try to restart it!
+     loop_1_hz_prevmillis = millis();
+     osd.checkStatus();
+  }
+#endif  
 
 }
 
@@ -305,7 +315,7 @@ void update_all() // duration is up to approx. 10ms depending on choosen display
     writePanels(); // writing enabled panels (check OSD_Panels Tab)
 }
 
-
+/*
 void unplugSlaves()
 {
     // Unplug list of SPI
@@ -314,6 +324,9 @@ void unplugSlaves()
 #endif
     digitalWrite(MAX7456_SELECT, HIGH); // unplug OSD
 }
+*/
+
+
 
 /*
 uint8_t _pinMask = 0;         // Pin bitmask.

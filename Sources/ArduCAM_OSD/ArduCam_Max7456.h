@@ -8,6 +8,11 @@
 
 #define MAX7456_SELECT              6 // SS
 #define MAX7456_VSYNC               2 // INT0
+//#define MAX7456RESET                10 // RESET // JDL
+
+//#define MAX7456ADD_STAT             0xA0 // JDL
+//#define MAX7456ADD_VM0              0x00 // JDL 
+
 
 #define NTSC                        0
 #define PAL                         1
@@ -61,7 +66,11 @@
 // Fat Shark 250mw Tx white streaks fix
 #define MAX7456_WHITE_level_80      0x07 // Black level 10%
 #define MAX7456_WHITE_level_90      0x0A // Black level 20%
-#define MAX7456_WHITE_level_100     0x09 // Black level 20%
+#ifdef RUNCAM2_4K_FIX
+  #define MAX7456_WHITE_level_100     0x05 // Black level 10%
+#else
+  #define MAX7456_WHITE_level_100     0x09 // Black level 20%
+#endif  
 #define MAX7456_WHITE_level_120     0x08 // Black level 20%
 #else /* FAT_SHARK */
 #define MAX7456_WHITE_level_80      0x03
@@ -90,7 +99,7 @@ public:
     OSD(void);
     void init(void);
     void clear(void);
-    void plug(void);
+//    void plug(void);
     void setAndOpenPanel(uint8_t start_col, uint8_t start_row);
     void openPanel1(void);
     void closePanel(void);
@@ -100,14 +109,17 @@ public:
     void openSingle(uint8_t x, uint8_t y);
     int getMode(void);
     int getCenter(void);
+#ifdef MAX_SOFTRESET
+    void checkStatus(void);
+#endif    
     virtual int     available(void);
     virtual int     read(void);
     virtual int     peek(void);
     virtual void    flush(void);
     virtual size_t write(uint8_t c);
-    #ifdef CHARSET_UPLOADER
+#ifdef CHARSET_UPLOADER
     void write_NVM(int font_count, uint8_t *character_bitmap);
-    #endif
+#endif
     using BetterStream::write;
 private:
     uint8_t start_col, start_row, col, row, video_mode, video_center;

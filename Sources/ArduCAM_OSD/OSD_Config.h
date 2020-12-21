@@ -13,13 +13,13 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // JDL: LP16.09 or "next" r.735+ UAVOs
-//#define NEXT_UAVO
+#define NEXT_UAVO
 
 // JDL: Display Startup Logo
-//#define LOGO_AT_BOOT
+#define LOGO_AT_BOOT
 
 // JDL: Update Charset Furnctionality 
-//#define CHARSET_UPLOADER
+#define CHARSET_UPLOADER
 
 // JDL: Display PathPlan Waypoints Progress
 #define PATHPLAN_WAYPOINTS_SUPPORT
@@ -37,7 +37,7 @@
 //#define RSSI_ON_INPUT_CHANNEL
 
 // JDL: Battery type (LiPo, LiIo) selection - for Wing Z-84 currently only
-#define BATTTYPE_SELECTION
+//#define BATTTYPE_SELECTION
 
 // JDL: Correction of Remaining Battery % Estimation (voltage based)
 #define BAT_VOLTAGE_CURVE                                            // DOESN'T WORK for LiIon (FixedWing) right now - it is disabled in the code for LiIons; currently optimised for Turnigy Graphene & Nano-Tech LiPos
@@ -45,12 +45,19 @@
 // JDL: LiHV battery type detection - for Quads currently only
 #define LIHV_DETECTION
 
+// JDL: Try to soft-reset MAX7456 after hard-reset / if stalled state detected
+#define MAX_SOFTRESET                
+
+// JDL: address issue with Runcam2 4K black level too high
+//#define RUNCAM2_4K_FIX
+
 // JDL: safety radius
 #define SAFETY_RADIUS
 #define LT_RADIUS_ESTIMATION
-//#define ST_RADIUS_ESTIMATION
+#define ST_RADIUS_ESTIMATION
 #define EFFICIENCY_ESTIMATION
 //#define BATP_RADIUS_ESTIMATION
+
 
 //#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_966V        // For ZMR250v2 Revo4 & EC250 Revo2 QUADS
 //#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_656V        // For Wing Z-84
@@ -68,8 +75,8 @@
 
 #define TEMP_SENSOR_PIN_ESC      A1
 #define TEMP_SENSOR_PIN_MOTOR    A3
-#define TEMP_SENSOR_PIN_AMBIENT  A2  // A2 for GepRC Mark4  // Batt1
-//#define TEMP_SENSOR_PIN_AMBIENT  A0  // A0 for MiniTalon  // Batt2
+//#define TEMP_SENSOR_PIN_AMBIENT  A2  // A2 for GepRC Mark4  // Batt1
+#define TEMP_SENSOR_PIN_AMBIENT  A0  // A0 for MiniTalon  // Batt2
 
 // Batt1 (to the right) - A2
 // Batt2 (to the left)  - A0
@@ -77,16 +84,16 @@
 // CURR                 - A1
 
 // JDL: Fixed Wing mode
-#define FIXED_WING
+//#define FIXED_WING
 
 // JDL: Low speed stall warning for fixed wing
-#define STALL_WARNING
+//#define STALL_WARNING
 
 // JDL: Glide distance estimation for Fixed Wing
-#define GLIDE_ESTIMATION
+//#define GLIDE_ESTIMATION
 
 // Version string
-#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.53"));
+#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.56"));
 
 // ---------------------------------------------------------------------
 
@@ -117,11 +124,12 @@
 //#define esc_temp_correction          +3.0 * 0.2          // correction in degC, multiplied by 0.2
 
 // GepRC Mark4 Temp Sensors Calibration 
-//#define ambient_temp_correction      0.0 * 0.2          // correction in degC, multiplied by 0.2
+//#define ambient_temp_correction      +2.0 * 0.2          // correction in degC, multiplied by 0.2
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 // Add MicroOSD KV team mod            // JDL: Enable it!
 #define MICRO_OSD_KVTEAM
 
@@ -129,7 +137,7 @@
 #define COMBINED_HEADING_AND_ROSE      // JDL: Keep it always enabled! 
 
 // JDL: Enable, compile, upload, setup batt capacity (via RC TX sticks), then disable, compile, upload - only useful for initial setup of a brand new MinOpOSD board
-//#define DO_ROUND_STORED_BATT_CAPACITY
+//#define DO_ROUND_STORED_BATT_CAPACITY    // Obsolete
 //
 //#define stall_threshold              40 / 3.6        // Speed in m/s !! - for Mini Talon - read from EEPROM (2.49+)!
 //#define stall_threshold              30 / 3.6        // Speed in m/s !! - for Wing Z84 - read from EEPROM (2.49+)!
@@ -163,6 +171,7 @@
 
 // JRChange: OP debug
 // #define OP_DEBUG
+
 
 // JRChange: GPS simulation
 // #define GPS_SIMULATION

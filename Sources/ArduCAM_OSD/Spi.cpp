@@ -30,6 +30,7 @@ void SPI::mode(byte config)
     // enable SPI master with configuration byte specified
     SPCR = 0;
     SPCR = (config & 0x7F) | (1 << SPE) | (1 << MSTR);
+    SPSR = (1<<SPI2X);                                    //JDL; SPI2X will double the rate (8 meg)
     tmp  = SPSR;
     tmp  = SPDR;
 }

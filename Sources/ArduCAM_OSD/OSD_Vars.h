@@ -26,6 +26,9 @@ static const PROGMEM uint8_t batt_curve_lihv[100] = {
 static const float batt_levels[5] = {5.0f, 8.8f, 13.2f, 17.45f, 21.8f};                                
 
 static unsigned long loop10hz_prevmillis; // 10hz loop
+#ifdef MAX_SOFTRESET
+static unsigned long loop_1_hz_prevmillis; // 1hz loop
+#endif
 
 static uint8_t panel             = 0;          // active panel: 0 = first panel. 1 = second panel, 2 = panel off
 static uint8_t old_panel         = 0;          

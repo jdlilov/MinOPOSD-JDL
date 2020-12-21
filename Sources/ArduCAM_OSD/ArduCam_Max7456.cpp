@@ -16,6 +16,7 @@ volatile int x;
 volatile int font_count;
 volatile byte character_bitmap[0x40];
 
+
 OSD::OSD()
 {}
 
@@ -23,13 +24,43 @@ OSD::OSD()
 
 void OSD::init()
 {
+
     pinMode(MAX7456_SELECT, OUTPUT);
     pinMode(MAX7456_VSYNC, INPUT);
     digitalWrite(MAX7456_VSYNC, HIGH); // enabling pull-up resistor
+    
+#ifdef MAX_SOFTRESET
+    uint8_t rval;
 
-    detectMode();
+    digitalWrite(MAX7456_SELECT, LOW);  // ENABLE
 
+    Spi.transfer(MAX7456_STAT_reg_read /*MAX7456ADD_STAT*/);
+    rval = Spi.transfer(0xFF);
+
+    if ((rval & 7) == 0) {
+        // The magic triplet
+        Spi.transfer(0xFF);
+        Spi.transfer(0xFF);
+        Spi.transfer(0xFF);
+        delay(200);
+
+        // Issue software reset
+        Spi.transfer(MAX7456_VM0_reg /*MAX7456ADD_VM0*/);
+        Spi.transfer((1 << 1));
+    }
+
+    digitalWrite(MAX7456_SELECT,HIGH); // DISABLE // JDL
+#endif
+
+
+//    detectMode();
+    if (EEPROM.read(PAL_NTSC_ADDR) == 1) {
+        setMode(1);
+    } else { 
+        setMode(0); 
+    }
     digitalWrite(MAX7456_SELECT, LOW);
+
     // read black level register
     Spi.transfer(MAX7456_OSDBL_reg_read); // black level read register
     byte osdbl_r = Spi.transfer(0xff);
@@ -37,7 +68,11 @@ void OSD::init()
     Spi.transfer(MAX7456_RESET | video_mode);
     delay(50);
     // set black level
+#ifdef RUNCAM2_4K_FIX      
+    byte osdbl_w = (osdbl_r | 0x10); // Set bit 4 to 1 11111111
+#else    
     byte osdbl_w = (osdbl_r & 0xef); // Set bit 4 to zero 11101111
+#endif    
     Spi.transfer(MAX7456_OSDBL_reg); // black level write register
     Spi.transfer(osdbl_w);
 
@@ -54,6 +89,7 @@ void OSD::init()
 
 // ------------------ Detect Mode (PAL/NTSC) ---------------------------------
 
+
 void OSD::detectMode()
 {
 // digitalWrite(MAX7456_SELECT,LOW);
@@ -65,7 +101,7 @@ void OSD::detectMode()
 // setMode(1);
 // }
 // else if((B00000010 & osdstat_r) == 1){
-    setMode(0);
+//    setMode(0);
 // }
 // #ifdef MinimOSD
 // else if (digitalRead(3) == 1){
@@ -75,10 +111,11 @@ void OSD::detectMode()
 
     if (EEPROM.read(PAL_NTSC_ADDR) == 1) {
         setMode(1);
-        digitalWrite(MAX7456_SELECT, LOW);
+//        digitalWrite(MAX7456_SELECT, LOW);
     } else { setMode(0); }
-    digitalWrite(MAX7456_SELECT, LOW);
+    digitalWrite(MAX7456_SELECT, LOW); 
 }
+
 
 // ------------------ Set Mode (PAL/NTSC) ------------------------------------
 
@@ -96,10 +133,17 @@ void OSD::setMode(int themode)
     }
 }
 
-// ------------------ Get Mode (PAL 0/NTSC 1) --------------------------------
+// ------------------ Get Mode (PAL 0/NTSC 1) - JDL: isn't this in reverese?! --------------------------------
 
 int OSD::getMode()
 {
+    if (video_mode == MAX7456_MODE_MASK_PAL) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+/*  
     switch (video_mode) {
     case MAX7456_MODE_MASK_NTCS:
         return 0;
@@ -110,7 +154,7 @@ int OSD::getMode()
 
         break;
     }
-    return 0;
+    return 0; */
 }
 
 // ------------------ Get Center (PAL/NTSC) ----------------------------------
@@ -121,11 +165,12 @@ int OSD::getCenter()
 }
 
 // ------------------ plug ---------------------------------------------------
-
+/*
 void OSD::plug()
 {
     digitalWrite(MAX7456_SELECT, LOW);
 }
+*/
 
 // ------------------ clear ---------------------------------------------------
 
@@ -264,6 +309,27 @@ void OSD::control(uint8_t ctrl)
     digitalWrite(MAX7456_SELECT, HIGH);
 }
 
+#ifdef MAX_SOFTRESET
+void OSD::checkStatus(void)              // JDL
+{
+    uint8_t srdata;
+  
+    digitalWrite(MAX7456_SELECT, LOW);  // ENABLE
+    Spi.transfer(0x80);
+    srdata = Spi.transfer(0xFF); 
+  
+    if ((B00001000 & srdata) == 0)
+        init(); 
+}
+#endif
+/*
+void MAX7456_Send(uint8_t add, uint8_t data)
+{
+  Spi.transfer(add);
+  Spi.transfer(data);
+}
+*/
+
 #ifdef CHARSET_UPLOADER
 void OSD::write_NVM(int font_count, uint8_t *character_bitmap)
 {
@@ -321,3 +387,4 @@ int OSD::peek(void)
     return 0;
 }
 void OSD::flush(void) {}
+
