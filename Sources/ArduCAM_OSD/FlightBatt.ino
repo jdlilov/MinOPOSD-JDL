@@ -38,17 +38,15 @@ void flight_batt_init(void)
 
 void flight_batt_read(void)
 {
-    static float voltage = -1.0; //LOW_VOLTAGE * 1.05; // battery voltage, initialized above the low voltage threshold to pre-load the filter and prevent low voltage events at startup
+    static float voltage = -1.0;                         // battery voltage, initialized above the low voltage threshold to pre-load the filter and prevent low voltage events at startup
     static float current_amps      = 0;                  // battery instantaneous currrent draw [A]
-    static float current_total     = 0;                 // totalized battery current [mAh]
+    static float current_total     = 0;                  // totalized battery current [mAh]
     static unsigned long loopTimer = 0;
     uint16_t delta_ms;
 
     if (loopTimer + MEASURE_PERIOD <= millis()) {
         delta_ms   = millis() - loopTimer;
         loopTimer  = millis();
-
-        analogReference(INTERNAL); // INTERNAL: a built-in reference, equal to 1.1 volts on the ATmega168 or ATmega328
 
         float sampled_voltage = CURRENT_VOLTAGE(analogRead(VOLTAGE_PIN));  // reads battery voltage pin
   
@@ -64,48 +62,16 @@ void flight_batt_read(void)
             }
         }
 
-//        voltage = (((analogRead(VOLTAGE_PIN)) * REF_VOLTAGE / 1024.0) * (volt_div_ratio / 100.0)) * .15 + voltage * .85;
- 
-
         if (batt_type) {
-
-          for (int cell_count=6; cell_count>1; --cell_count) {
-              if ((voltage > batt_levels[cell_count-2]) && (num_cells <= cell_count)) {
-                  num_cells = cell_count;
-                  break;
-              }
-          }
-/*  
-          if (voltage > 21.8)                            // min 3.63V for 6-cell (21.0-25.2)    (21.0-26.1)      // 28994    22.2
-            num_cells=6;
-          else  
-            if ((voltage > 17.45) && (num_cells < 5))    // min 3.49V for 5-cell (17.5-21.0)    (17.5-21.75)                 17.8
-              num_cells=5;
-            else  
-              if ((voltage > 13.2) && (num_cells < 4))   // min 3.30V for 4-cell (14.0-16.8)    (14.0-17.4)                  13.4
-                num_cells=4;
-              else 
-                if ((voltage > 8.8) && (num_cells < 3))  // min 2.93V for 3-cell (10.5-12.6)    (10.5-13.05)                 9.0 
-                  num_cells=3;
-                else  
-                  if ((voltage > 5.0) && (num_cells < 2))// min 2.50V for 2-cell (7.0-8.4)      (7.0-8.7)                    4.60
-                    num_cells=2;                             */
+            for (int cell_count=6; cell_count>1; --cell_count) {
+                if ((voltage > batt_levels[cell_count-2]) && (num_cells <= cell_count)) {
+                    num_cells = cell_count;
+                    break;
+                }
+            }
         }
         else 
-          num_cells = 4;
-
-
-//        if (batt_type) {
-//          if (voltage > 12.8) 
-//            num_cells=4;
-//          else 
-//            if (voltage > 8.6) 
-//              num_cells=3;
-//            else  
-//              num_cells=2;
-//        }
-//        else 
-//          num_cells = 4;
+            num_cells = 4;
 
 #ifdef LIHV_DETECTION                  
         LiHV_mode = LiHV_mode || ((voltage / num_cells) > 4.265);
@@ -174,10 +140,6 @@ void flight_batt_read(void)
         #endif                
         }
         else {
-//                #ifdef BAT_VOLTAGE_CURVE
-//                  sampled_batt_percent = batt_curve[(uint8_t)(((osd_vbat_A / num_cells) - 3.0) * 92.5925926)];        // LiIon
-//                #else                
-
             battP_raw = ((osd_vbat_A / num_cells) - 3.0) * 92.5925926;
             if (battP_raw < 0.0)
             {
@@ -187,10 +149,7 @@ void flight_batt_read(void)
             {
               battP_raw = 99.0;
             }
-//            battP_int = (uint8_t)battP_raw;
-
             sampled_batt_percent = (uint8_t)battP_raw;          // LiIon
-//                #endif                
         }
 
         if (osd_battery_remaining_percent_V == -1.0) {
@@ -205,18 +164,10 @@ void flight_batt_read(void)
             }
         }
         
-//        if (osd_battery_remaining_percent_V > 99.0)
-//        {
-//            osd_battery_remaining_percent_V = 99.0;
-//        }
 
         if (curr_amp_per_volt > 0) { // Consider Amp sensor disbled when Amp per Volt ratio is zero
 
-//            current_amps   = CURRENT_AMPS(analogRead(CURRENT_PIN)) * .2 + current_amps * .8;       // reads battery sensor current pin
-
-            analogReference(DEFAULT); // Power supply: 5V
-            current_amps   = ((((analogRead(CURRENT_PIN)) * CUR_REF_VOLTAGE / 1024.0) - (curr_amp_offset / 10000.0)) * (curr_amp_per_volt / 100.0)) * .2 + current_amps * .8;       // reads battery sensor current pin
-//            current_amps   = ((analogRead(CURRENT_PIN) * CUR_REF_VOLTAGE / 512000.0) - (curr_amp_offset / 5000000.0)) * curr_amp_per_volt + current_amps * .8;       // reads battery sensor current pin
+            current_amps   = CURRENT_AMPS(analogRead(CURRENT_PIN)) * .2 + current_amps * .8;       // reads battery sensor current pin
 
             current_total += current_amps * (float)delta_ms * 0.0002778; // .0002778 is 1/3600 (conversion to hours)
             osd_curr_A     = current_amps * 100;

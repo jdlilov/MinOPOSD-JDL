@@ -40,27 +40,18 @@
 
 #else
 
-#define VOLTAGE_PIN       6                      // MinOPOSD JDL - ZMR250 CC3D ?!
-#define CURRENT_PIN       1                      // MinOPOSD JDL
-//#define VOLTAGE_PIN       A2                      // MinOPOSD JDL - Fixed, Batt1 (right-most pad)
-//#define CURRENT_PIN       A1                      // MinOPOSD JDL - Curr (left-most pad)
+#define VOLTAGE_PIN       6 
+#define CURRENT_PIN       7 
 
 #endif
 
 #define REF_VOLTAGE       1.1                     // INTERNAL: a built-in reference, equal to 1.1 volts on the ATmega168 or ATmega328
-#define CUR_REF_VOLTAGE   4.98                     // EXTERBNAL: power supply 5.0V
-
-#ifdef FLIGHT_BATT_ON_MINIMOSD
-  #define LOW_VOLTAGE       14.0                    // filter start value for 4s LiPo
-#else
-  #define LOW_VOLTAGE       10.5                    // filter start value for 3s LiPo
-#endif
 
 #define VOLT_DIV_RATIO    15.14     // 15.73      // Vref 1.1V based: This is the start value for calibrating a 16k0/1k1 voltage divider usable up to 4s LiPo
 
 // !!! for the +-50A Current Sensor(AC/DC) DFRobot SEN0098 we need approx. a 1/4 voltage divider 3k0/1k1 so that we stay below 1.1 V -> 2*50A * 0.04V/A / (4.1/1.1) = 1.073 V !!!
-#define CURR_AMP_PER_VOLT 17.25                   // XXX Vref 1.1V based: This is the start value for calibrating a +-50A Current Sensor(AC/DC) DFRobot SEN0098 Sensitivity: 40 mV/A
-#define CURR_AMPS_OFFSET  0.000                   // XXX Vref 1.1V based: This is the start value for calibrating a +-50A Current Sensor(AC/DC) DFRobot SEN0098 Sensitivity: 40 mV/A
+#define CURR_AMP_PER_VOLT 100.00                  // Vref 1.1V based: This is the start value for calibrating a +-50A Current Sensor(AC/DC) DFRobot SEN0098 Sensitivity: 40 mV/A
+#define CURR_AMPS_OFFSET  0.5000                  // Vref 1.1V based: This is the start value for calibrating a +-50A Current Sensor(AC/DC) DFRobot SEN0098 Sensitivity: 40 mV/A
 
 #define CURRENT_VOLTAGE(x) ((x) * REF_VOLTAGE / 1024.0) * (volt_div_ratio / 100.0)
 #define CURRENT_AMPS(x)    (((x) * REF_VOLTAGE / 1024.0) - (curr_amp_offset / 10000.0)) * (curr_amp_per_volt / 100.0)
