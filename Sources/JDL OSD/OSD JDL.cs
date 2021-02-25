@@ -943,7 +943,7 @@ namespace OSD
         private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
-            if (((CheckedListBox)sender).SelectedItem != null)
+/*            if (((CheckedListBox)sender).SelectedItem != null)
             {
                 if (((CheckedListBox)sender).SelectedItem.ToString() == "Horizon" && e.NewValue == CheckState.Checked)
                 {
@@ -956,7 +956,7 @@ namespace OSD
                     LIST_items.SetItemChecked(index, false);
                 }
             }
-
+            */
             // add a delay to this so it runs after the control value has been defined.
                 if (this.IsHandleCreated)
                     this.BeginInvoke((MethodInvoker)delegate { osdDraw1(); });
@@ -965,7 +965,7 @@ namespace OSD
         private void checkedListBox2_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
-            if (((CheckedListBox)sender).SelectedItem != null)
+/*            if (((CheckedListBox)sender).SelectedItem != null)
             {
                 if (((CheckedListBox)sender).SelectedItem.ToString() == "Horizon" && e.NewValue == CheckState.Checked)
                 {
@@ -978,7 +978,7 @@ namespace OSD
                     LIST_items2.SetItemChecked(index, false);
                 }
             }
-
+            */
             // add a delay to this so it runs after the control value has been defined.
             if (this.IsHandleCreated)
                 this.BeginInvoke((MethodInvoker)delegate { osdDraw2(); });
