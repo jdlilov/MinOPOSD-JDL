@@ -59,7 +59,6 @@ void InitializeOSD()
   }
 
   osd.setAndOpenPanel(4, 9);
-//  osd.openPanel();
   osd.printf_P(PSTR("OSD Initialized, reboot"));
   osd.closePanel();
 
@@ -207,7 +206,6 @@ void readSettings()
   //    overspeed   = EEPROM.read(overspeed_ADDR);    // JDL Changed
 #if defined STALL_WARNING    
   stall_threshold = (float)EEPROM.read(stall_ADDR) / 3.6f;
-//  stall_threshold = stall_threshold / 3.6f; // convert from km/h -> m/s
 #endif  
 
   battv       = EEPROM.read(battv_ADDR);
@@ -221,31 +219,11 @@ void readSettings()
   #if defined DO_ROUND_STORED_BATT_CAPACITY
   batt_capacity = round(batt_capacity / 10) * 10;
   #endif
-//  batt_capacity = round((EEPROM.read(batt_capacity_ADDR) + (EEPROM.read(batt_capacity_ADDR + 1) << 8)) /10) * 10;
 #endif
 
 //  switch_mode = 0; // JDL Changed // EEPROM.read(switch_mode_ADDR);
 
 //  ch_toggle = 7; // JDL Changed // EEPROM.read(ch_toggle_ADDR);
-
-//  osd_temp_mode     = EEPROM.read(temp_mode_ADDR);
-
-  // pal_ntsc = EEPROM.read(pal_ntsc_ADDR);
-  // if (EEPROM.read(._ADDR) < 4 || EEPROM.read(ch_toggle_ADDR) > 8){
-  // EEPROM.write(ch_toggle_ADDR, 5);
-  // }
-  // battp = EEPROM.read(battp_ADDR);
-
-
-  // if (EEPROM.read(panSetup_en_ADDR) != 1){
-  // EEPROM.write(panSetup_en_ADDR, 1);
-  // }
-  //    rssical           = EEPROM.read(OSD_RSSI_HIGH_ADDR);
-  //    rssipersent       = EEPROM.read(OSD_RSSI_LOW_ADDR);
-  //    rssiraw_on        = EEPROM.read(OSD_RSSI_RAW_ADDR);
-
-  //    batt_warn_level   = EEPROM.read(OSD_BATT_WARN_ADDR);
-  //    rssi_warn_level   = EEPROM.read(OSD_RSSI_WARN_ADDR);
 
   // JRChange: Flight Batt on MinimOSD:
 #ifdef FLIGHT_BATT_ON_MINIMOSD
@@ -423,45 +401,4 @@ int checkPAL(int line)
   }
   return line;
 }
-/* // JDL Disabled, although already unused
-void updateSettings(byte panelu, byte panel_x, byte panel_y, byte panel_s)
-{
-  if (panel >= 1 && panel <= 32) {
-    writeEEPROM(panel_s, (6 * panelu) - 6 + 0);
-    if (panel_s != 0) {
-      writeEEPROM(panel_x, (6 * panelu) - 6 + 2);
-      writeEEPROM(panel_y, (6 * panelu) - 6 + 4);
-    }
-    osd.clear();
-    readSettings();
-    for (panel = 0; panel < npanels; panel++) {
-      readPanelSettings();
-    }
-  }
-}
-*/
-/*
-// JRChange: Flight Batt on MinimOSD:
-#ifdef FLIGHT_BATT_ON_MINIMOSD
-void writeBattSettings()
-{
-  EEPROM.write(BATT_CHK, BATT_VER);
-  EEPROM.write(volt_div_ratio_ADDR, (int)(VOLT_DIV_RATIO * 100.0) & 0xff);
-  EEPROM.write(volt_div_ratio_ADDR + 1, ((int)(VOLT_DIV_RATIO * 100.0) >> 8) & 0xff);
-  EEPROM.write(curr_amp_per_volt_ADDR, (int)(CURR_AMP_PER_VOLT * 100.0) & 0xff);
-  EEPROM.write(curr_amp_per_volt_ADDR + 1, ((int)(CURR_AMP_PER_VOLT * 100.0) >> 8) & 0xff);
-  EEPROM.write(curr_amp_offset_ADDR, (int)(CURR_AMPS_OFFSET * 10000.0) & 0xff);
-  EEPROM.write(curr_amp_offset_ADDR + 1, ((int)(CURR_AMPS_OFFSET * 10000.0) >> 8) & 0xff);
-}
-#endif    
-
-#if defined SAFETY_RADIUS && defined LT_RADIUS_ESTIMATION
-void writeBattSettings()
-{
-  EEPROM.write(BATT_CHK, BATT_VER);
-  EEPROM.write(batt_capacity_ADDR, (int)(batt_capacity) & 0xff);
-  EEPROM.write(batt_capacity_ADDR + 1, ((int)(batt_capacity) >> 8) & 0xff);
-}
-#endif    
-*/
 

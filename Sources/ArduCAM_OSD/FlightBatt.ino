@@ -108,14 +108,15 @@ void flight_batt_read(void)
 
         if (batt_type) {
             battP_raw = ((osd_vbat_A / num_cells) - 3.4635) * bpm;
-            if (battP_raw < 0.0)
+/*            if (battP_raw < 0.0)
             {
               battP_raw = 0.0;
             }
             if (battP_raw > 99.0)
             {
               battP_raw = 99.0;
-            }
+            } */
+            battP_raw = constrain(battP_raw, 0.0f, 99.0f);
             battP_int = (uint8_t)battP_raw;
           
         #ifdef BAT_VOLTAGE_CURVE
@@ -141,14 +142,16 @@ void flight_batt_read(void)
         }
         else {
             battP_raw = ((osd_vbat_A / num_cells) - 3.0) * 92.5925926;
-            if (battP_raw < 0.0)
+/*            if (battP_raw < 0.0)
             {
               battP_raw = 0.0;
             }
             if (battP_raw > 99.0)
             {
               battP_raw = 99.0;
-            }
+            } */
+            battP_raw = constrain(battP_raw, 0.0f, 99.0f);
+            
             sampled_batt_percent = (uint8_t)battP_raw;          // LiIon
         }
 

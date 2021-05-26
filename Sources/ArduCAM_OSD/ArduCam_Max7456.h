@@ -8,11 +8,6 @@
 
 #define MAX7456_SELECT              6 // SS
 #define MAX7456_VSYNC               2 // INT0
-//#define MAX7456RESET                10 // RESET // JDL
-
-//#define MAX7456ADD_STAT             0xA0 // JDL
-//#define MAX7456ADD_VM0              0x00 // JDL 
-
 
 #define NTSC                        0
 #define PAL                         1

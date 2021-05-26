@@ -13,10 +13,10 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Version string
-#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.57"));
+#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.58"));
 
 // JDL: LP16.09 or "next" r.735+ UAVOs
-//#define NEXT_UAVO
+#define NEXT_UAVO
 
 // JDL: Display Startup Logo
 #define LOGO_AT_BOOT
@@ -28,10 +28,10 @@
 #define PATHPLAN_WAYPOINTS_SUPPORT
 
 // JRChange: Flight Batt on MinimOSD:
-#define FLIGHT_BATT_ON_MINIMOSD
+//#define FLIGHT_BATT_ON_MINIMOSD
 
 // JRChange: Flight Batt on Revo:
-//#define FLIGHT_BATT_ON_REVO
+#define FLIGHT_BATT_ON_REVO
 
 // OpenPilot Revo add ons
 #define REVO_ADD_ONS
@@ -52,13 +52,13 @@
 #define MAX_SOFTRESET                
 
 // JDL: address issue with Runcam2 4K black level too high
-#define RUNCAM2_4K_FIX
+//#define RUNCAM2_4K_FIX
 
 // JDL: safety radius
-//#define SAFETY_RADIUS
-//#define LT_RADIUS_ESTIMATION
-//#define ST_RADIUS_ESTIMATION
-//#define EFFICIENCY_ESTIMATION
+#define SAFETY_RADIUS
+#define LT_RADIUS_ESTIMATION
+#define ST_RADIUS_ESTIMATION
+#define EFFICIENCY_ESTIMATION
 //#define BATP_RADIUS_ESTIMATION
 
 

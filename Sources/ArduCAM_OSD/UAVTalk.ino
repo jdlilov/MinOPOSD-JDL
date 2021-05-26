@@ -451,7 +451,6 @@ int uavtalk_read(void)
                 }
                 break;
 #endif /* SEND_GCSTELEMETRYSTATS */
-//            case ATTITUDEACTUAL_OBJID:
             case ATTITUDESTATE_OBJID:
                 last_flighttelemetry_connect = millis();
 #ifndef SEND_GCSTELEMETRYSTATS
@@ -481,9 +480,7 @@ int uavtalk_read(void)
                 break;
             case FLIGHTSTATUS_OBJID_008:
                 osd_armed = uavtalk_get_int8(&msg, FLIGHTSTATUS_OBJ_ARMED);
-//              #ifndef FIXED_WING
                 osd_aswa = uavtalk_get_int8(&msg, FLIGHTSTATUS_OBJ_ASWA);
-//              #endif  
                 osd_mode  = uavtalk_get_int8(&msg, FLIGHTSTATUS_OBJ_FLIGHTMODE);
                 break;
             case MANUALCONTROLCOMMAND_OBJID_003:
@@ -631,14 +628,16 @@ int uavtalk_read(void)
 
                 if (batt_type) {
                     battP_raw = ((osd_vbat_A / num_cells) - 3.4635) * bpm;
-                    if (battP_raw < 0.0)
+/*                    if (battP_raw < 0.0)
                     {
                         battP_raw = 0.0;
                     }
                     if (battP_raw > 99.0)
                     {
                         battP_raw = 99.0;
-                    }
+                    } */
+                    battP_raw = constrain(battP_raw, 0.0f, 99.0f);
+
                     battP_int = (uint8_t)battP_raw;
 
   
@@ -668,14 +667,16 @@ int uavtalk_read(void)
 //                  sampled_batt_percent = batt_curve[(uint8_t)(((osd_vbat_A / num_cells) - 3.0) * 92.5925926)];        // LiIon
 //                #else                
                     battP_raw = ((osd_vbat_A / num_cells) - 3.0) * 92.5925926;
-                    if (battP_raw < 0.0)
+/*                    if (battP_raw < 0.0)
                     {
                         battP_raw = 0.0;
                     }
                     if (battP_raw > 99.0)
                     {
                         battP_raw = 99.0;
-                    }
+                    } */
+                    battP_raw = constrain(battP_raw, 0.0f, 99.0f);
+                    
                     sampled_batt_percent = (uint8_t)battP_raw;          // LiIon
 //                #endif                
                 }
@@ -692,25 +693,18 @@ int uavtalk_read(void)
                     }
                 }
                 
-//                if (osd_battery_remaining_percent_V > 99.0)
-//                {
-//                  osd_battery_remaining_percent_V = 99.0;
-//                }
-//                if (osd_battery_remaining_percent_V < 0.0)
-//                {
-//                  osd_battery_remaining_percent_V = 0.0;
-//                }
-                
                 osd_battery_remaining_percent_A = (1.0 - (float)osd_total_A / (float)batt_capacity) * 100.0;
 
-                if (osd_battery_remaining_percent_A > 99.0)
+/*                if (osd_battery_remaining_percent_A > 99.0)
                 {
                   osd_battery_remaining_percent_A = 99.0;
                 } 
                 if (osd_battery_remaining_percent_A < 0.0)
                 {
                   osd_battery_remaining_percent_A = 0.0;
-                }
+                } */
+                osd_battery_remaining_percent_A = constrain(osd_battery_remaining_percent_A, 0.0f, 99.0f);
+                
                 
 
   #ifndef SAFETY_RADIUS
@@ -736,7 +730,7 @@ int uavtalk_read(void)
 
                 // We prefer this altitude from positionstate because filtered (same value displayed in PFD)
                 // Become automatically to baro altitude if GPS not used
-				// revo_baro_alt = -(int16_t)uavtalk_get_float(&msg,  POSITIONSTATE_OBJ_DOWN);
+		// revo_baro_alt = -(int16_t)uavtalk_get_float(&msg,  POSITIONSTATE_OBJ_DOWN);
                 break;
 #endif				
                 
@@ -748,22 +742,7 @@ int uavtalk_read(void)
                 oplm_rssi = uavtalk_get_int8(&msg, OPLINKSTATUS_OBJ_RSSI);
                 oplm_linkquality = uavtalk_get_int8(&msg, OPLINKSTATUS_OBJ_LINKQUALITY);
                 break;
-
-//            case OPLINKRECEIVER_OBJID:
-//                oplm_receiver_rssi = uavtalk_get_int8(&msg, OPLINKRECEIVER_OBJ_RSSI);
-//                oplm_receiver_linkquality = uavtalk_get_int8(&msg, OPLINKRECEIVER_OBJ_LINKQUALITY);
-//                break;
 #endif
-/* JDL Disabled            case RECEIVERSTATUS_OBJID:
-                osd_receiver_quality = uavtalk_get_int8(&msg, RECEIVERSTATUS_OBJ_QUALITY);
-                break;
-*/
-/*            case TXPIDSTATUS_OBJID:                                                    // JDL Changed
-                osd_txpid_cur[0] = uavtalk_get_float(&msg, TXPIDSTATUS_OBJ_CURPID1);
-                osd_txpid_cur[1] = uavtalk_get_float(&msg, TXPIDSTATUS_OBJ_CURPID2);
-                osd_txpid_cur[2] = uavtalk_get_float(&msg, TXPIDSTATUS_OBJ_CURPID3);
-                break;
-*/
 
 #ifdef PATHPLAN_WAYPOINTS_SUPPORT
             case WAYPOINTACTIVE_OBJID:                                                    // JDL 
@@ -807,10 +786,6 @@ int uavtalk_read(void)
                 osd_airspeed = uavtalk_get_float(&msg, AIRSPEEDSTATE_OBJ_CALIBRATEDAIRSPEED);
                 break;
 #endif
-                // TODO implement more X_OBJID for more OSD data
-                // osd_waypoint_seq = 0;           // waypoint sequence
-                // osd_airspeed = 0;               // air speed (only with pitot tube)
-                // etc.
             }
             #if 0
             if (msg.MsgType == UAVTALK_TYPE_OBJ_ACK) {

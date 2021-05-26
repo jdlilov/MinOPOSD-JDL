@@ -234,7 +234,7 @@ void writePanels()
 
 #if defined FLIGHT_BATT_ON_MINIMOSD || defined FLIGHT_BATT_ON_REVO
   #ifdef SAFETY_RADIUS
-                if (ISb(panel, SR_EGE_BIT)) {
+                if (ISb(panel, SR_EGE_BIT) && (osd_armed > 1)) {
                     panSR_EGE(panSR_EGE_XY[0][panel], panSR_EGE_XY[1][panel]);
                 }
   #endif

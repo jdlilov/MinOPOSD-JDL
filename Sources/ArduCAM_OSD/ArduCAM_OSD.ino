@@ -1,4 +1,4 @@
-// JDL v2.57 (31.12.2020) (for LP 16.09_next_r735) - Requires Charset_1_3_0 - jdl v.16c.mcm
+// JDL v2.58 (24.02.2021) (for LP 16.09_next_r735) - Requires Charset_1_3_0 - jdl v.16c.mcm
 // CC3D & Revo Compatible
 /*
 
@@ -94,7 +94,6 @@
 /* ***************** DEFINITIONS *******************/
 
 // OSD Hardware
-// #define ArduCAM328
 #define MinimOSD
 
 #define TELEMETRY_SPEED 57600 // How fast our MAVLink telemetry is coming to Serial port
@@ -111,11 +110,6 @@ OSD osd; // OSD object
 
 void setup()
 {
-#ifdef ArduCAM328
-    pinMode(10, OUTPUT); // USB ArduCam Only
-#endif
-//    pinMode(MAX7456_SELECT, OUTPUT); // OSD CS    // JDL: Removed because is set again in osd::init
-
     Serial.begin(TELEMETRY_SPEED);
 
 #ifdef membug
@@ -123,7 +117,6 @@ void setup()
 #endif
 
     // Prepare OSD for displaying
-//    unplugSlaves();                                 // JDL: Removed because is called again in osd::init
     osd.init();
 
     // Start
@@ -133,7 +126,6 @@ void setup()
     // OSD debug for development (Shown at start)
 #ifdef membug
     osd.setAndOpenPanel(1, 1);
-//    osd.openPanel();
     osd.printf("%i", freeMem());
     osd.closePanel();
 #endif
@@ -149,27 +141,11 @@ void setup()
     // also checks if we have new version that needs EEPROM reset
     if (readEEPROM(CHK1) + readEEPROM(CHK2) != VER) {
         osd.setAndOpenPanel(6, 9);
-//        osd.openPanel();
         osd.printf_P(PSTR("missing/old config"));
         osd.closePanel();
         InitializeOSD();
     }
 #endif
-/*
-#if defined FLIGHT_BATT_ON_MINIMOSD //  || defined SAFETY_RADIUS
-// JRChange: Flight Batt on MinimOSD:
-    // Check EEPROM to see if we have initialized the battery values already
-    if (readEEPROM(BATT_CHK) != BATT_VER) {
-        writeBattSettings();
-    }
-#endif    
-*/
-
-//#ifdef CHECK_FIRMWARE_TYPE    // JDL
-//    if (readEEPROM(firmware_type_ADDR) != FIRMWARE_TYPE) {
-//        writeEEPROM(firmware_type_ADDR, FIRMWARE_TYPE);
-//    }
-//#endif
 
 // Get correct panel settings from EEPROM
     readSettings();
@@ -177,10 +153,8 @@ void setup()
         readPanelSettings();
     }
     panel = 0; // set panel to 0 to start in the first navigation screen
-    // Show bootloader bar... No, don't, save code 
 
 #ifdef FLIGHT_BATT_ON_REVO
-//    delay(1000); // To give small extra waittime to users
     Serial.flush();
   #ifdef LOGO_AT_BOOT
     delay(BOOTTIME+1000); // To give small extra waittime to users
@@ -212,14 +186,6 @@ void setup()
 // As simple as possible.
 void loop()
 {
-//  if (uavtalk())
-//    update_all();
-//      
-//  if ((loop10hz_prevmillis + 100) < millis() ) {
-//    loop10hz_prevmillis = millis();
-//    update_all();
-//  }
-
   if (uavtalk_read() || ((loop10hz_prevmillis + 100) < millis() )) {
       loop10hz_prevmillis = millis();
       update_all();
@@ -314,19 +280,6 @@ void update_all() // duration is up to approx. 10ms depending on choosen display
     setHomeVars(osd); // calculate and set Distance from home and Direction to home
     writePanels(); // writing enabled panels (check OSD_Panels Tab)
 }
-
-/*
-void unplugSlaves()
-{
-    // Unplug list of SPI
-#ifdef ArduCAM328
-    digitalWrite(10, HIGH); // unplug USB HOST: ArduCam Only
-#endif
-    digitalWrite(MAX7456_SELECT, HIGH); // unplug OSD
-}
-*/
-
-
 
 /*
 uint8_t _pinMask = 0;         // Pin bitmask.

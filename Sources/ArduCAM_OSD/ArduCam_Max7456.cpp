@@ -92,26 +92,8 @@ void OSD::init()
 
 void OSD::detectMode()
 {
-// digitalWrite(MAX7456_SELECT,LOW);
-// read STAT and auto detect Mode PAL/NTSC
-// Spi.transfer(MAX7456_STAT_reg_read);//status register
-// byte osdstat_r = Spi.transfer(0xff);
-
-// if ((B00000001 & osdstat_r) == 1){
-// setMode(1);
-// }
-// else if((B00000010 & osdstat_r) == 1){
-//    setMode(0);
-// }
-// #ifdef MinimOSD
-// else if (digitalRead(3) == 1){
-// setMode(1);
-// }
-// #endif
-
     if (EEPROM.read(PAL_NTSC_ADDR) == 1) {
         setMode(1);
-//        digitalWrite(MAX7456_SELECT, LOW);
     } else { setMode(0); }
     digitalWrite(MAX7456_SELECT, LOW); 
 }
@@ -143,18 +125,6 @@ int OSD::getMode()
     else {
         return 0;
     }
-/*  
-    switch (video_mode) {
-    case MAX7456_MODE_MASK_NTCS:
-        return 0;
-
-        break;
-    case MAX7456_MODE_MASK_PAL:
-        return 1;
-
-        break;
-    }
-    return 0; */
 }
 
 // ------------------ Get Center (PAL/NTSC) ----------------------------------
@@ -182,12 +152,7 @@ void OSD::clear()
     Spi.transfer(MAX7456_CLEAR_display);
 
     delay(1);
-/*
-    Spi.transfer(MAX7456_DMAH_reg); // set start address high
-    Spi.transfer(0);
-    Spi.transfer(MAX7456_DMAL_reg); // set start address low
-    Spi.transfer(0);
-*/
+
     digitalWrite(MAX7456_SELECT, HIGH);
 }
 
@@ -232,15 +197,6 @@ void OSD::openSingle(uint8_t x, uint8_t y)
 
 void OSD::openPanel1(void)
 {
-/*  
-    byte settings;
-
-    openSingle(col, row);
-    settings = MAX7456_INCREMENT_auto; // To Enable DMM Auto Increment
-    Spi.transfer(MAX7456_DMM_reg); // dmm
-    Spi.transfer(settings);
-*/    
-
     unsigned int linepos;
     byte settings, char_address_hi, char_address_lo;
 
@@ -322,13 +278,6 @@ void OSD::checkStatus(void)              // JDL
         init(); 
 }
 #endif
-/*
-void MAX7456_Send(uint8_t add, uint8_t data)
-{
-  Spi.transfer(add);
-  Spi.transfer(data);
-}
-*/
 
 #ifdef CHARSET_UPLOADER
 void OSD::write_NVM(int font_count, uint8_t *character_bitmap)

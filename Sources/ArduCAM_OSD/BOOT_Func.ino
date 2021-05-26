@@ -30,7 +30,6 @@ void loadBar() // change name due we don't have CLI anymore
         if (waitTimer % (BOOTTIME / 7) == 0) {
             // Update bar itself
             osd.setAndOpenPanel(barX + 12 + barStep, barY);
-//            osd.openPanel();
             osd.write('\xee');
             osd.closePanel();
             barStep++;
