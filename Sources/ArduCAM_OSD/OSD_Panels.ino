@@ -1315,7 +1315,17 @@ void panThr(int first_col, int first_line)
 {
     osd.setAndOpenPanel(first_col, first_line);
 //    osd.openPanel();
+
+#ifdef DISPLAY_THRUST_INSTEAD_OF_THROTTLE
+    uint16_t tmp_thr = osd_throttle;
+    if (osd_mode > 6) {    // All autonomous modes
+        tmp_thr = osd_thrust;
+    }
+    osd.printf("%c%3.0i%c", 0x87, tmp_thr, 0x25);
+#else
     osd.printf("%c%3.0i%c", 0x87, osd_throttle, 0x25);
+#endif    
+
     osd.closePanel();
 }
 

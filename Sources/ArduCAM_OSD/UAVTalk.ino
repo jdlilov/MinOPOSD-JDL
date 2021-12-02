@@ -483,6 +483,13 @@ int uavtalk_read(void)
                 osd_aswa = uavtalk_get_int8(&msg, FLIGHTSTATUS_OBJ_ASWA);
                 osd_mode  = uavtalk_get_int8(&msg, FLIGHTSTATUS_OBJ_FLIGHTMODE);
                 break;
+
+#ifdef DISPLAY_THRUST_INSTEAD_OF_THROTTLE
+            case ACTUATORDESIRED_OBJID:
+                osd_thrust = (int16_t)(100.0 * uavtalk_get_float(&msg, ACTUATORDESIRED_OBJ_THRUST));
+                break;
+#endif                
+
             case MANUALCONTROLCOMMAND_OBJID_003:
                 osd_throttle = (int16_t)(100.0 * uavtalk_get_float(&msg, MANUALCONTROLCOMMAND_OBJ_THROTTLE));
                 if (osd_throttle < 0 || osd_throttle > 200) {

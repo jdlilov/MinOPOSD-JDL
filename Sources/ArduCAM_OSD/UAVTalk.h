@@ -51,6 +51,11 @@
 // uavobjgenerator -flight ..\..\shared\uavobjectdefinition ..\..\
 // //
 
+#define ACTUATORDESIRED_OBJID					0xEAE65C28
+
+#define ACTUATORDESIRED_OBJ_THRUST                              12
+
+
 #define WAYPOINTACTIVE_OBJID					0x1EA5B19C
 
 #define WAYPOINTACTIVE_OBJID_INDEX				0
@@ -377,6 +382,11 @@ int uavtalk_state(void);
 // generate release and copy exe to <top>\ground\uavobjgenerator
 // uavobjgenerator -flight ..\..\shared\uavobjectdefinition ..\..\
 // //
+
+#define ACTUATORDESIRED_OBJID					0xEAE65C28
+
+#define ACTUATORDESIRED_OBJ_THRUST                              12
+
 
 #define WAYPOINTACTIVE_OBJID					0x1EA5B19C
 

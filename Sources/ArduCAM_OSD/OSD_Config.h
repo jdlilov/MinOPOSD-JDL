@@ -13,7 +13,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Version string
-#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.58"));
+#define VERSION_STRING          osd.printf_P(PSTR("minoposd jdl 2.59"));
 
 // JDL: LP16.09 or "next" r.735+ UAVOs
 #define NEXT_UAVO
@@ -22,7 +22,7 @@
 #define LOGO_AT_BOOT
 
 // JDL: Update Charset Furnctionality 
-#define CHARSET_UPLOADER
+//#define CHARSET_UPLOADER
 
 // JDL: Display PathPlan Waypoints Progress
 #define PATHPLAN_WAYPOINTS_SUPPORT
@@ -46,40 +46,44 @@
 #define BAT_VOLTAGE_CURVE                                            // DOESN'T WORK for LiIon (FixedWing) right now - it is disabled in the code for LiIons; currently optimised for Turnigy Graphene & Nano-Tech LiPos
 
 // JDL: LiHV battery type detection - for Quads currently only
-#define LIHV_DETECTION
+//#define LIHV_DETECTION
 
 // JDL: Try to soft-reset MAX7456 after hard-reset / if stalled state detected
-#define MAX_SOFTRESET                
+//#define MAX_SOFTRESET                
 
 // JDL: address issue with Runcam2 4K black level too high
-//#define RUNCAM2_4K_FIX
+#define RUNCAM2_4K_FIX
+
+#define DISPLAY_THRUST_INSTEAD_OF_THROTTLE
 
 // JDL: safety radius
 #define SAFETY_RADIUS
 #define LT_RADIUS_ESTIMATION
-#define ST_RADIUS_ESTIMATION
+//#define ST_RADIUS_ESTIMATION
 #define EFFICIENCY_ESTIMATION
 //#define BATP_RADIUS_ESTIMATION
 
 
-//#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_966V        // For ZMR250v2 Revo4 & EC250 Revo2 QUADS
+//#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_966V        // For ZMR250v3 Revo4 & EC250 Revo2 QUADS
 //#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_656V        // For Wing Z-84
 //#define TEMP_SENSOR_CALIBRATION_VOLTAGE_4_865V        // For GepRC Mark4 Revo6 QUAD
 
-// JDL: Using external LM335Z Sensor for ESC temp monitoring - Wing Z-84 & ZMR250 Revo QUADS & MiniTalon
-//#define TEMP_SENSOR_LM335Z_ESC
+// JDL: Using external LM335Z Sensor for ESC temp monitoring - Wing Z-84 & EC250 Revo2 QUAD & MiniTalon
+#define TEMP_SENSOR_LM335Z_ESC
 
 // JDL: Using second external LM335Z Sensor for Motor temp monitoring - MiniTalon
-//#define TEMP_SENSOR_LM335Z_MOTOR
+#define TEMP_SENSOR_LM335Z_MOTOR
 
-// JDL: Using third LM335Z Sensor for Ambient temp monitoring - MiniTalon & GepRC Mark4 
-//#define TEMP_SENSOR_LM335Z_AMBIENT
+// JDL: Using third LM335Z Sensor for Ambient temp monitoring - MiniTalon & GepRC Mark4 & ZMR250v3 Revo4
+#define TEMP_SENSOR_LM335Z_AMBIENT
 
 
 #define TEMP_SENSOR_PIN_ESC      A1
 #define TEMP_SENSOR_PIN_MOTOR    A3
-#define TEMP_SENSOR_PIN_AMBIENT  A2  // A2 for GepRC Mark4  // Batt1
-//#define TEMP_SENSOR_PIN_AMBIENT  A0  // A0 for MiniTalon  // Batt2
+
+//#define TEMP_SENSOR_PIN_AMBIENT  A2  // A2 for GepRC Mark4  // Batt1
+#define TEMP_SENSOR_PIN_AMBIENT  A0  // A0 for MiniTalon  // Batt2
+//#define TEMP_SENSOR_PIN_AMBIENT  A1  // A1 for ZMR250v3 Revo4
 
 // Batt1 (to the right) - A2
 // Batt2 (to the left)  - A0
@@ -87,13 +91,13 @@
 // CURR                 - A1
 
 // JDL: Fixed Wing mode
-//#define FIXED_WING
+#define FIXED_WING
 
 // JDL: Low speed stall warning for fixed wing
-//#define STALL_WARNING
+#define STALL_WARNING
 
 // JDL: Glide distance estimation for Fixed Wing
-//#define GLIDE_ESTIMATION
+#define GLIDE_ESTIMATION
 
 // ---------------------------------------------------------------------
 
@@ -109,16 +113,16 @@
 
 #define stall_threshold_warn_margin  4 / 3.6         // 4km/h in m/s
 
-//ZMR250v2 Quad Temp Sensor Calibration
-//#define esc_temp_correction          0.0 * 0.2          // correction in degC, multiplied by 0.2
+//ZMR250v3 Revo4 Quad Temp Sensor Calibration
+//#define ambient_temp_correction      0.0 * 0.2          // correction in degC, multiplied by 0.2
 
 //EC250 ZMR250v1 Quad Temp Sensor Calibration
 //#define esc_temp_correction          +1.0 * 0.2          // correction in degC, multiplied by 0.2
 
 // Mini Talon Temp Sensors Calibrations 
-//#define esc_temp_correction        -3.0 * 0.2          // correction in degC, multiplied by 0.2
-//#define motor_temp_correction      -2.0 * 0.2
-//#define ambient_temp_correction    -3.0 * 0.2
+#define esc_temp_correction        -3.0 * 0.2          // correction in degC, multiplied by 0.2
+#define motor_temp_correction      -2.0 * 0.2
+#define ambient_temp_correction    -3.0 * 0.2
 
 // Wing-Z84 Temp Sensors Calibrations 
 //#define esc_temp_correction          +3.0 * 0.2          // correction in degC, multiplied by 0.2

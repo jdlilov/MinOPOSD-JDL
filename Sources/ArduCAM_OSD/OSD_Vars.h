@@ -95,6 +95,10 @@ static int16_t osd_pitch         = 0;          // pitch from FC
 static int16_t osd_yaw           = 0;          // relative heading from FC
 static uint16_t osd_throttle     = 0;          // throttle
 
+#ifdef DISPLAY_THRUST_INSTEAD_OF_THROTTLE
+static uint16_t osd_thrust       = 0;          // actuatordesired_thrust
+#endif
+
 static uint8_t osd_alt_cnt       = 0;          // counter for stable osd_alt
 static float osd_alt_prev        = 0;          // previous altitude
 static uint8_t osd_got_home      = 0;          // tells if got home position or not
